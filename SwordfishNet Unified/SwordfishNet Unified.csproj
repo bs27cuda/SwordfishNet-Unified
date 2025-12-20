@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows</TargetFramework>
+    <RootNamespace>SwordfishNet_Unified</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BouncyCastle.Cryptography" Version="2.6.2" />
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3650.58" />
+    <PackageReference Include="SSH.NET" Version="2025.1.0" />
+    <PackageReference Include="WebView2.Runtime.X64" Version="143.0.3650.96" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,30 @@
+﻿<Page x:Class="SwordfishNet_Unified.UTerminal"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:SwordfishNet_Unified"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      KeepAlive="True"
+      Title="Terminal"
+      Background="DarkOrange">
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="30" />
+        </Grid.RowDefinitions>
+        <TextBox x:Name="TerminalOutput" Grid.Row="0" Background="Black" Foreground="LimeGreen"
+                 VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Hidden"
+                 FontSize="12" FontFamily="DejaVu Sans Mono" AllowDrop="False" Focusable="False" IsReadOnlyCaretVisible="True" />
+
+        <TextBox x:Name="TerminalInput" Grid.Row="1" Background="Black" Foreground="LimeGreen" 
+                 VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"
+                 FontSize="12" FontFamily="DejaVu Sans Mono" VerticalContentAlignment="Center"
+                 KeyDown="TerminalInput_KeyDown"
+                 SelectionChanged="TerminalInput_SelectionChanged"
+                 PreviewKeyDown="TerminalInput_PreviewKeyDown"
+                 CommandManager.PreviewExecuted="TerminalInput_PreviewExecuted"/>
+    </Grid>
+</Page>
