@@ -1,5 +1,4 @@
 ﻿using Renci.SshNet.Sftp;
-using System;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -16,7 +15,7 @@ namespace SwordfishNet_Unified
 
             try
             {
-                TreeViewItem rootItem = new TreeViewItem
+                TreeViewItem rootItem = new()
                 {
                     Header = UserCredentials.Instance.ServerPath,
                     Tag = "/"
@@ -49,13 +48,12 @@ namespace SwordfishNet_Unified
         {
             if (e.NewValue is TreeViewItem selectedItem)
             {
-                string path = selectedItem.Tag as string;
-                if (path != null)
+                if (selectedItem?.Tag is string path)
                 {
                     _currentServerPath = path;
-                    DisplayServerFiles(path);
+                    DisplayServerFiles(path, Get_sftpClient());
 
-                    if (selectedItem.Items.Count == 1 && selectedItem.Items[0] == null)
+                    if (selectedItem?.Items.Count == 1 && selectedItem.Items[0] == null)
                     {
                         selectedItem.Items.Clear();
                         LoadServerSubdirectories(selectedItem, path);
@@ -70,13 +68,13 @@ namespace SwordfishNet_Unified
             try
             {
                 var items = _sftpClient.ListDirectory(parentPath);
-                foreach (SftpFile sftpItem in items)
+                foreach (SftpFile sftpItem in items.Cast<SftpFile>())
                 {
                     if (sftpItem.Name == "." || sftpItem.Name == "..") continue;
 
                     if (sftpItem.IsDirectory)
                     {
-                        TreeViewItem item = new TreeViewItem
+                        TreeViewItem item = new()
                         {
                             Header = sftpItem.Name,
                             Tag = sftpItem.FullName
@@ -92,19 +90,29 @@ namespace SwordfishNet_Unified
                 MessageBox.Show($"Error accessing directory {parentPath}: {ex.Message}", "sFTP error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
-        private void DisplayServerFiles(string path)
+
+        private Renci.SshNet.SftpClient? Get_sftpClient()
+        {
+            return _sftpClient;
+        }
+        private void DisplayServerFiles(string path, Renci.SshNet.SftpClient? _sftpClient)
         {
             ServerList.Items.Clear();
             try
             {
-                var items = _sftpClient.ListDirectory(path);
-                foreach (SftpFile sftpItem in items)
+                if (_sftpClient == null)
+                {
+                    MessageBox.Show($"SFTP client is not connected.", "sFTP error", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    return;
+                }
+                IEnumerable<ISftpFile> items = _sftpClient.ListDirectory(path);
+                foreach (SftpFile sftpItem in items.Cast<SftpFile>())
                 {
                     if (sftpItem.IsRegularFile)
                     {
                         ServerList.Items.Add(new
                         {
-                            Name = sftpItem.Name,
+                            sftpItem.Name,
                             Size = (sftpItem.Length / 1024).ToString("N0") + " kb",
                             Extension = Path.GetExtension(sftpItem.Name),
                             Modified = sftpItem.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss")
@@ -124,7 +132,7 @@ namespace SwordfishNet_Unified
             if (string.IsNullOrEmpty(_currentServerPath)) return false;
 
             dynamic selectedItem = ServerList.SelectedItem;
-            string fileName = selectedItem?.Name as string;
+            string? fileName = selectedItem?.Name as string;
             if (string.IsNullOrEmpty(fileName)) return false;
 
             string remotePath = (_currentServerPath == "/")
@@ -159,7 +167,7 @@ namespace SwordfishNet_Unified
             if (string.IsNullOrEmpty(_currentServerPath)) return false;
 
             dynamic selectedItem = ServerList.SelectedItem;
-            string fileName = selectedItem?.Name as string;
+            string? fileName = selectedItem?.Name as string;
             if (string.IsNullOrEmpty(fileName)) return false;
 
             string remotePath = (_currentServerPath == "/")
@@ -175,7 +183,7 @@ namespace SwordfishNet_Unified
 
                 try
                 {
-                    DisplayServerFiles(_currentServerPath);
+                    DisplayServerFiles(_currentServerPath, Get_sftpClient());
                 }
                 catch
                 {

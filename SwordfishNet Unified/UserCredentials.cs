@@ -1,4 +1,6 @@
-﻿namespace SwordfishNet_Unified
+﻿using Org.BouncyCastle.Asn1.Mozilla;
+
+namespace SwordfishNet_Unified
 {
     public sealed class UserCredentials
     {
@@ -34,6 +36,18 @@
             this.HttpPort = httpPort;
             this.HttpsPort = httpsPort;
             this.ConfigPassword = password;
+        }
+        
+        public void ClearCredentials()
+        {
+            this.ServerPath = string.Empty;
+            this.Username = string.Empty;
+            this.Password = string.Empty;
+            this.SshPort = "0";
+            this.SftpPort = "0";
+            this.HttpPort = "0";
+            this.HttpsPort = "0";
+            this.ConfigPassword = string.Empty;
         }
 
         public bool AreCredentialsSetBrowser()

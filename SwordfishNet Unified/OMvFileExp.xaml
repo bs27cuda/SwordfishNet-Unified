@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:SwordfishNet_Unified"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="800" d:DesignWidth="1200" d:Background="White"
       Title="OMVFileExp">
 
     <Grid>
@@ -27,7 +27,7 @@
             <Button x:Name="RmDir" Content="DELETE folder" Height="40" HorizontalAlignment="Stretch" Margin="3"/>
         </StackPanel>
 
-        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1" Margin="3" VerticalAlignment="Top">
+        <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1" Margin="3" VerticalAlignment="Bottom">
             <Button x:Name="OpenFile" Content="Open selected file..." Height="40" HorizontalAlignment="Stretch" Margin="3" Click="OpenFile_Click"/>
             <Button x:Name="CpFToServ" Content="Copy file to server" Height="40" HorizontalAlignment="Stretch" Margin="3"/>
             <Button x:Name="CpFToLocal" Content="Copy file to local" Height="40" HorizontalAlignment="Stretch" Margin="3"/>
@@ -35,17 +35,24 @@
             <Button x:Name="RmFile" Content="DELETE file" Height="40" HorizontalAlignment="Stretch" Margin="3" Click="DeleteFile_Click"/>
         </StackPanel>
 
-        <StackPanel Grid.Column="0" Grid.RowSpan="2" Orientation="Vertical" Margin="10" VerticalAlignment="Stretch" Background="#FF22AA22">
-            <Label Content="LOCAL COMPUTER" FontSize="20" FontWeight="SemiBold" HorizontalAlignment="Center"/>
-            <TreeView x:Name="LocalTree" Height="390" SelectedItemChanged="LocalTree_SelItemChanged" Margin="3"/>
+        <Grid Grid.Column="0" Grid.RowSpan="2" Margin="3" Background="#FFAADDEE">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <ListView x:Name="LocalList" Height="325" Margin="3">
+            <Label Grid.Row="0" Content="LOCAL COMPUTER" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+
+            <TreeView x:Name="LocalTree" Grid.Row="1" SelectedItemChanged="LocalTree_SelItemChanged" Margin="3" FontSize="14"/>
+
+            <ListView x:Name="LocalList" Grid.Row="2" Margin="3" FontSize="14">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="200"/>
                         <GridViewColumn Header="Size" DisplayMemberBinding="{Binding Size}" Width="100"/>
                         <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Extension}" Width="100"/>
-                        <GridViewColumn Header="Date Modified"  DisplayMemberBinding="{Binding Modified}" Width="150"/>
+                        <GridViewColumn Header="Date Modified" DisplayMemberBinding="{Binding Modified}" Width="150"/>
                     </GridView>
                 </ListView.View>
                 <ListView.ContextMenu>
@@ -59,19 +66,27 @@
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
-        </StackPanel>
+        </Grid>
 
-        <StackPanel Grid.Column="2" Grid.RowSpan="2" Orientation="Vertical" Margin="10" Background="#FFAA2222">
-            <Label Content="SERVER STORAGE" FontSize="20" FontWeight="SemiBold" HorizontalAlignment="Center"/>
-            <TreeView x:Name="ServerTree" Height="390" SelectedItemChanged="ServerTree_SelItemChanged" Margin="3"/>
+        <Grid Grid.Column="2" Grid.RowSpan="2" Margin="5" Background="#FFCC8888">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <ListView x:Name="ServerList" Height="325" Margin="3">
+            <Label Grid.Row="0" Content="SERVER STORAGE" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+
+            <TreeView x:Name="ServerTree" Grid.Row="1" SelectedItemChanged="ServerTree_SelItemChanged" Margin="3" FontSize="14"/>
+
+            <ListView x:Name="ServerList" Grid.Row="3" Margin="3" FontSize="14">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="200"/>
                         <GridViewColumn Header="Size" DisplayMemberBinding="{Binding Size}" Width="100"/>
                         <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Extension}" Width="100"/>
-                        <GridViewColumn Header="Date Modified"  DisplayMemberBinding="{Binding Modified}" Width="150"/>
+                        <GridViewColumn Header="Date Modified" DisplayMemberBinding="{Binding Modified}" Width="150"/>
                     </GridView>
                 </ListView.View>
                 <ListView.ContextMenu>
@@ -85,6 +100,6 @@
                     </ContextMenu>
                 </ListView.ContextMenu>
             </ListView>
-        </StackPanel>
+        </Grid>
     </Grid>
     </Page>

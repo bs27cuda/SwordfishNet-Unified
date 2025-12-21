@@ -1,20 +1,20 @@
-﻿using SwordfishNet;
+﻿using Renci.SshNet;
+using SwordfishNet;
+using System.IO;
+using System.Net.Mail;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
-using System.IO;
-using Renci.SshNet;
 
 namespace SwordfishNet_Unified
 {
     public partial class ServerConfigPage : Page
     {
-        private static ServerConfigPage _instance;
+        private static ServerConfigPage? _instance;
         public static ServerConfigPage Instance => _instance ??= new ServerConfigPage();
-        private Brush _originalBrush;
 
         private const string netConfigFileName = "netconfig.dat";
         private const string ConfigEncryptionKey = "5kf93m-d94k1-ad69wcr-m9348uv-w34pet-prm0t-9uwv4e-9t8y-nwgpe-5wvm";
@@ -22,6 +22,7 @@ namespace SwordfishNet_Unified
         public ServerConfigPage()
         {
             InitializeComponent();
+            LogoffButton.IsEnabled = false;
         }
         private void ConnectButton_Click(object sender, RoutedEventArgs e)
         {
@@ -52,22 +53,45 @@ namespace SwordfishNet_Unified
                      UserCredentials.Instance.HttpPort,
                      UserCredentials.Instance.HttpsPort
                  );
-                if (_originalBrush == null) _originalBrush = LoginButton.Background;
-                LoginButton.Background = Brushes.LightGreen;
-
-                DispatcherTimer timer = new DispatcherTimer();
-                timer.Interval = TimeSpan.FromSeconds(2);
-                timer.Tick += (s, args) =>
-                {
-                    LoginButton.Background = _originalBrush;
-                    timer.Stop();
-                };
-                timer.Start();
                 PasswordBox.Clear();
+                LogoffButton.IsEnabled = true;
+                LoginButton.IsEnabled = false;
+                MainWindow.Instance.SetEnabledTabs(true);
             }
             else
             {
                 MessageBox.Show("Failed to connect to the server. Credentials refused.", "Connection Refused", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private async void LogoffButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                LogoffButton.IsEnabled = false;
+
+                UserCredentials.Instance.ClearCredentials();
+                OMVFileExp.Instance.CloseSftpConnection();
+                UTerminal.Instance.Shutdown();
+
+                if (OMVBrowser.Instance.OMVDashboardSlab.CoreWebView2 != null)
+                {
+                    await OMVBrowser.Instance.OMVDashboardSlab.CoreWebView2.Profile.ClearBrowsingDataAsync();
+                    OMVBrowser.Instance.OMVDashboardSlab.Source = new Uri("about:blank");
+                }
+                MainWindow.Instance.SetEnabledTabs(false);
+
+                UsernameTextBox.Clear();
+                ServAddrBox.Clear();
+                ServSshPortBox.Clear();
+                ServSftpPortBox.Clear();
+                ServHttpPortBox.Clear();
+                ServHttpsPortBox.Clear();
+
+                LoginButton.IsEnabled = true;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Logoff Crash Prevented: {ex.Message}");
             }
         }
         private bool TestSftpConnection(string serverPath, string user, string pass)
@@ -190,6 +214,7 @@ namespace SwordfishNet_Unified
                 timer.Stop();
             };
             timer.Start();
+            UsernameTextBox.Focus();
         }
         private void LoadServerConfiguration(object sender, RoutedEventArgs e)
         {
@@ -222,7 +247,7 @@ namespace SwordfishNet_Unified
 
             try
             {
-                string jsonString = EncryptionHelper.DecryptAndLoad(decryptionPassword, filePath);
+                string? jsonString = EncryptionHelper.DecryptAndLoad(decryptionPassword, filePath);
 
                 if (jsonString == null)
                 {
@@ -248,10 +273,33 @@ namespace SwordfishNet_Unified
             );
 
                 MessageBox.Show("Configuration loaded successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                UsernameTextBox.Focus();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Failed to load configuration: {ex.Message}", "Load Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private async void CloseApp_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (UTerminal.Instance != null)
+                    UTerminal.Instance.Shutdown();
+
+                if (OMVFileExp.Instance != null)
+                    OMVFileExp.Instance.CloseSftpConnection();
+
+                if (OMVBrowser.Instance != null && OMVBrowser.Instance.OMVDashboardSlab != null)
+                    OMVBrowser.Instance.OMVDashboardSlab.Dispose();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"App Close Crash Prevented: {ex.Message}");
+            }
+            finally
+            {
+                Application.Current.Shutdown();
             }
         }
     }

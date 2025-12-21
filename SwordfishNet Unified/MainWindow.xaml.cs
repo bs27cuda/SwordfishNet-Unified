@@ -4,24 +4,38 @@ namespace SwordfishNet_Unified
 {
     public partial class MainWindow : Window
     {
+        public static MainWindow Instance { get; private set; } = null!;
         public MainWindow()
         {
             InitializeComponent();
+            Instance = this;
             ServerConfigFrame.Navigate(ServerConfigPage.Instance);
             OMVBrowserFrame.Navigate(OMVBrowser.Instance);
             OMVFileExpFrame.Navigate(OMVFileExp.Instance);
             TerminalFrame.Navigate(UTerminal.Instance);
+            FileExpTab.IsEnabled = false;
+            TermTab.IsEnabled = false;
+            NASPortalTab.IsEnabled = false;
+            ServTab.IsSelected = true;
+            ServTab.IsEnabled = true;
+            SetEnabledTabs(false);
         }
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        public void SetEnabledTabs(bool isEnabled)
         {
-            UTerminal.Instance?.Shutdown();
-
-            base.OnClosing(e);
+            FileExpTab.IsEnabled = isEnabled;
+            TermTab.IsEnabled = isEnabled;
+            NASPortalTab.IsEnabled = isEnabled;
+            
+            if (!isEnabled)
+            {
+                FileExpTab.IsSelected = false;
+                FileExpTab.IsEnabled = false;
+                TermTab.IsSelected = false;
+                TermTab.IsEnabled = false;
+                NASPortalTab.IsSelected = false;
+                NASPortalTab.IsEnabled = false;
+                ServTab.IsSelected = true;
+            }
         }
-        private void OpenTerminal_Click(object sender, RoutedEventArgs e)
-        {
-            TerminalFrame.Navigate(UTerminal.Instance);
-        }
-
     }
 }

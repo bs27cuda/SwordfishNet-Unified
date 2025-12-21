@@ -13,7 +13,7 @@ namespace SwordfishNet_Unified
         {
             foreach (string drive in Directory.GetLogicalDrives())
             {
-                TreeViewItem item = new TreeViewItem
+                TreeViewItem item = new()
                 {
                     Header = drive,
                     Tag = drive
@@ -41,8 +41,7 @@ namespace SwordfishNet_Unified
         {
             if (e.NewValue is TreeViewItem selectedItem)
             {
-                string path = selectedItem.Tag as string;
-                if (path != null)
+                if (selectedItem.Tag is string path)
                 {
                     _currentLocalPath = path;
                     DisplayLocalFiles(path);
@@ -61,7 +60,7 @@ namespace SwordfishNet_Unified
             {
                 foreach (string dir in Directory.GetDirectories(parentPath))
                 {
-                    TreeViewItem item = new TreeViewItem
+                    TreeViewItem item = new()
                     {
                         Header = new DirectoryInfo(dir).Name,
                         Tag = dir
@@ -80,12 +79,12 @@ namespace SwordfishNet_Unified
             {
                 foreach (string file in Directory.GetFiles(path))
                 {
-                    FileInfo info = new FileInfo(file);
+                    FileInfo info = new(file);
                     LocalList.Items.Add(new
                     {
-                        Name = info.Name,
+                        info.Name,
                         Size = (info.Length / 1024).ToString("N0") + " kb",
-                        Extension = info.Extension,
+                        info.Extension,
                         Modified = info.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss")
                     });
                 }
@@ -98,7 +97,7 @@ namespace SwordfishNet_Unified
             if (string.IsNullOrEmpty(_currentLocalPath)) return false;
 
             dynamic selectedItem = LocalList.SelectedItem;
-            string fileName = selectedItem?.Name as string;
+            string? fileName = selectedItem?.Name as string;
             if (string.IsNullOrEmpty(fileName)) return false;
 
             string fullPath = Path.Combine(_currentLocalPath, fileName);
@@ -113,7 +112,7 @@ namespace SwordfishNet_Unified
             if (string.IsNullOrEmpty(_currentLocalPath)) return false;
 
             dynamic selectedItem = LocalList.SelectedItem;
-            string fileName = selectedItem?.Name as string;
+            string? fileName = selectedItem?.Name as string;
             if (string.IsNullOrEmpty(fileName)) return false;
 
             string fullPath = Path.Combine(_currentLocalPath, fileName);

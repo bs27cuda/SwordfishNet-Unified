@@ -26,8 +26,8 @@
             <ColumnDefinition Width="350"/>
         </Grid.ColumnDefinitions>
 
-        <Label Grid.Row="0" Content="Please ensure that all settings on this page are valid." Grid.ColumnSpan="2"  FontSize="18" Margin="15,0,0,0"/>
-        <Label Grid.Row="1" Content="They will be used to configure your connections to various services." Grid.ColumnSpan="2"  FontSize="18" Margin="15,0,0,0"/>
+        <Label Grid.Row="0" Content="Please ensure that all settings on this page are valid." Grid.ColumnSpan="2"  FontSize="18" Margin="15,0,0,0" Padding="3"/>
+        <Label Grid.Row="1" Content="They will be used to configure your connections to various services." Grid.ColumnSpan="2"  FontSize="18" Margin="15,0,0,0" Padding="3"/>
 
         <Label Content="Server address:" FontSize="22" Margin="20,0,0,0" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"/>
         <TextBox x:Name="ServAddrBox" Width="300" Height="30" FontSize="18" Margin="10,0,0,0" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"/>
@@ -51,12 +51,14 @@
         <Grid Grid.Row="8" Grid.ColumnSpan="2">
             <StackPanel Margin="5">
                 <Label Content="Username:" FontSize="16" Margin="0,0,0,5"/>
-                <TextBox x:Name="UsernameTextBox" Height="30" FontSize="16" Margin="0,0,0,5" KeyDown="GotoPass"/>
+                <TextBox x:Name="UsernameTextBox" Height="30" FontSize="16" Margin="0,0,0,5" KeyDown="GotoPass" VerticalContentAlignment="Center"/>
 
                 <Label Content="Password:" FontSize="16" Margin="0,0,0,5"/>
-                <PasswordBox x:Name="PasswordBox" Height="30" FontSize="16" Margin="0,0,0,5" PasswordChar="×" KeyDown="DoLogin"/>
+                <PasswordBox x:Name="PasswordBox" Height="30" FontSize="16" Margin="0,0,0,5" PasswordChar="×" KeyDown="DoLogin" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
 
                 <Button x:Name="LoginButton" Content="Login" Height="40" FontSize="16" Background="#FFbb11" Foreground="White" Click="ConnectButton_Click"/>
+                <Button x:Name="LogoffButton" Content="Log Off" Height="40" FontSize="16" Background="DarkRed" Foreground="White" Margin="0,10,0,0" Click="LogoffButton_Click"/>
+                <Button x:Name="CloseApp" Content="EXIT" Height="40" FontSize="16" Background="Black" Foreground="White" Margin="0,10,0,0" Click="CloseApp_Click"/>
             </StackPanel>
         </Grid>
     </Grid>

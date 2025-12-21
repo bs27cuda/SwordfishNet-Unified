@@ -5,46 +5,51 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SwordfishNet_Unified"
         mc:Ignorable="d"
-        
+        WindowState="Maximized"
         Title="Swordfish unified portal"
-        Height="800" Width="1200"
+        MinHeight="800" MinWidth="1200"
         ResizeMode="CanResize">
 
-    <Window.Resources>
-        <ResourceDictionary>
-            <Style TargetType="TabItem">
-                <Setter Property="FontSize" Value="20"/>
-                <Setter Property="FontWeight" Value="SemiBold"/>
-                <Setter Property="Padding" Value="10,5"/>
-                <Setter Property="FontFamily" Value="Segoe Print"/>
-            </Style>
-        </ResourceDictionary>
-    </Window.Resources>
-
     <Grid>
-        <TabControl Background="OrangeRed">
+        <TabControl Background="Bisque" IsTabStop="True">
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="FontSize" Value="20"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="Padding" Value="30,10"/>
+                    <Setter Property="FontFamily" Value="Segoe Print"/>
+                </Style>
+            </TabControl.Resources>
+
             <TabControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <UniformGrid Rows="1" Columns="0" IsItemsHost="True"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.25*"/>
+                            <ColumnDefinition Width="0.25*"/>
+                            <ColumnDefinition Width="0.25*"/>
+                            <ColumnDefinition Width="0.25*"/>
+                            <ColumnDefinition Width="40"/>
+                        </Grid.ColumnDefinitions>
+                    </Grid>
                 </ItemsPanelTemplate>
             </TabControl.ItemsPanel>
 
-            <TabItem Header="Network configuration">
+            <TabItem x:Name="ServTab" Header="Network configuration" Grid.Column="0">
                 <Frame x:Name="ServerConfigFrame"/>
             </TabItem>
 
-            <TabItem Header="NAS portal">
+            <TabItem x:Name="NASPortalTab" Header="NAS portal" Grid.Column="1">
                 <Frame x:Name="OMVBrowserFrame"/>
             </TabItem>
 
-            <TabItem Header="Terminal">
+            <TabItem x:Name="TermTab" Header="Terminal" Grid.Column="2">
                 <Frame x:Name="TerminalFrame"/>
             </TabItem>
 
-            <TabItem Header="File browser">
+            <TabItem x:Name="FileExpTab" Header="File browser" Grid.Column="3">
                 <Frame x:Name="OMVFileExpFrame"/>
             </TabItem>
         </TabControl>
     </Grid>
-    
 </Window>

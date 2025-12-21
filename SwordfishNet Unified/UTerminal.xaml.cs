@@ -10,7 +10,7 @@ namespace SwordfishNet_Unified
 {
     public partial class UTerminal : Page
     {
-        private static UTerminal _instance;
+        private static UTerminal? _instance;
         public static UTerminal Instance => _instance ??= new UTerminal();
 
         private SshClient _sshClient;
@@ -37,20 +37,47 @@ namespace SwordfishNet_Unified
         }
         public void Shutdown()
         {
-            try
+            if (_shellStream != null)
             {
-                if (_shellStream != null)
-                {
-                    _shellStream.DataReceived -= ShellStream_DataReceived;
-                    _shellStream.Dispose();
-                }
-                if (_sshClient != null)
-                {
-                    if (_sshClient.IsConnected) _sshClient.Disconnect();
-                    _sshClient.Dispose();
-                }
+                _shellStream.DataReceived -= ShellStream_DataReceived;
             }
-            catch { /* Ignore errors during hard shutdown */ }
+            Task.Run(() =>
+            {
+                try
+                {
+                    if (_shellStream != null)
+                    {
+                        _shellStream.Close();
+                        _shellStream.Dispose();
+                        _shellStream = null;
+                    }
+
+                    if (_sshClient != null)
+                    {
+                        if (_sshClient.IsConnected)
+                        {
+                            _sshClient.Disconnect();
+                        }
+                        _sshClient.Dispose();
+                        _sshClient = null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Network Cleanup Error: {ex.Message}");
+                }
+            });
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                try
+                {
+                    TerminalInput.IsEnabled = false;
+                    TerminalInput.Clear();
+                    TerminalOutput.Clear();
+                    TerminalOutput.AppendText("--- Disconnected ---");
+                }
+                catch { /* Page might already be unloaded */ }
+            }));
         }
         private async Task UTerminal_ConnectAsync()
         {
@@ -175,7 +202,8 @@ namespace SwordfishNet_Unified
         }
         private void TerminalInput_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            // Keep the cursor in the writable area
+            if (!TerminalInput.IsEnabled || string.IsNullOrEmpty(TerminalInput.Text))
+                return;
             if (TerminalInput.CaretIndex < PromptLength)
             {
                 TerminalInput.CaretIndex = PromptLength;

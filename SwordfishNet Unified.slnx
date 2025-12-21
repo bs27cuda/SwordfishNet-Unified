@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="SwordfishNet Unified/SwordfishNet Unified.csproj" />
+  <Project Path="SwordfishNet Unified/SwordfishNet Unified.csproj">
+    <Platform Project="x64" />
+  </Project>
 </Solution>
