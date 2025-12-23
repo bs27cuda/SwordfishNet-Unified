@@ -18,14 +18,22 @@ namespace SwordfishNet_Unified
             {
                 await OMVDashboardSlab.EnsureCoreWebView2Async(null);
                 string ipAddress = UserCredentials.Instance.ServerPath;
-
                 if (string.IsNullOrWhiteSpace(ipAddress))
                 {
                     MessageBox.Show("No server path has been indicated. Please enter information on landing pad.", "No server path found", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
+
                 string targetURL = $"http://{ipAddress.Trim()}";
-                OMVDashboardSlab.CoreWebView2.Navigate(targetURL);
+
+                if (OMVDashboardSlab != null && OMVDashboardSlab.CoreWebView2 != null)
+                {
+                    OMVDashboardSlab.CoreWebView2.Navigate(targetURL);
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine("OMVDashboardSlab or CoreWebView2 is not available after EnsureCoreWebView2Async.");
+                }
             }
             catch (Exception ex)
             {

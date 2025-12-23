@@ -73,11 +73,16 @@ namespace SwordfishNet_Unified
                 OMVFileExp.Instance.CloseSftpConnection();
                 UTerminal.Instance.Shutdown();
 
-                if (OMVBrowser.Instance.OMVDashboardSlab.CoreWebView2 != null)
+                var slab = OMVBrowser.Instance?.OMVDashboardSlab;
+                if (slab != null)
                 {
-                    await OMVBrowser.Instance.OMVDashboardSlab.CoreWebView2.Profile.ClearBrowsingDataAsync();
-                    OMVBrowser.Instance.OMVDashboardSlab.Source = new Uri("about:blank");
+                    if (slab.CoreWebView2 != null)
+                    {
+                        await slab.CoreWebView2.Profile.ClearBrowsingDataAsync();
+                    }
+                    slab.Source = new Uri("about:blank");
                 }
+
                 MainWindow.Instance.SetEnabledTabs(false);
 
                 UsernameTextBox.Clear();
@@ -94,7 +99,7 @@ namespace SwordfishNet_Unified
                 System.Diagnostics.Debug.WriteLine($"Logoff Crash Prevented: {ex.Message}");
             }
         }
-        private bool TestSftpConnection(string serverPath, string user, string pass)
+        private static bool TestSftpConnection(string serverPath, string user, string pass)
         {
             if (!int.TryParse(UserCredentials.Instance.SftpPort, out int sftpPort))
             {
@@ -102,26 +107,24 @@ namespace SwordfishNet_Unified
                 return false;
             }
 
-            using (var client = new SftpClient(serverPath, sftpPort, user, pass))
+            using var client = new SftpClient(serverPath, sftpPort, user, pass);
+            try
             {
-                try
+                client.Connect();
+                if (client.IsConnected)
                 {
-                    client.Connect();
-                    if (client.IsConnected)
-                    {
-                        client.Disconnect();
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
-                    }
+                    client.Disconnect();
+                    return true;
                 }
-                catch (Exception Ex)
+                else
                 {
-                    MessageBox.Show($"Connection failed: {Ex.Message}", "Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return false;
                 }
+            }
+            catch (Exception Ex)
+            {
+                MessageBox.Show($"Connection failed: {Ex.Message}", "Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
             }
         }
         private void GotoPass(object sender, KeyEventArgs e)
@@ -159,19 +162,17 @@ namespace SwordfishNet_Unified
 
             if (dialogResult == true)
             {
-                encryptionPassword = netConfigLogin.EnteredPassword;
+                if (netConfigLogin.EnteredPassword != null)
+                {
+                    encryptionPassword = netConfigLogin.EnteredPassword;
+                }
             }
             else
             {
                 MessageBox.Show("Configuration save canceled. No encryption password provided.", "Canceled", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
-            if (string.IsNullOrWhiteSpace(encryptionPassword))
-            {
-                MessageBox.Show("Configuration save canceled. Encryption password cannot be empty.", "Canceled", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
-
+            
             UserCredentials.Instance.SetCredentials(
                 ServAddrBox.Text.Trim(),
                 UserCredentials.Instance.Username,
@@ -206,8 +207,10 @@ namespace SwordfishNet_Unified
 
             SaveServerConfig.Background = Brushes.LightGreen;
 
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(2);
+            DispatcherTimer timer = new()
+            {
+                Interval = TimeSpan.FromSeconds(2)
+            };
             timer.Tick += (s, args) =>
             {
                 SaveServerConfig.Background = Brushes.LightGray;
@@ -231,17 +234,14 @@ namespace SwordfishNet_Unified
 
             if (dialogResult == true)
             {
-                decryptionPassword = netConfigLogin.EnteredPassword;
+                if (netConfigLogin.EnteredPassword != null)
+                {
+                    decryptionPassword = netConfigLogin.EnteredPassword;
+                }
             }
             else
             {
                 MessageBox.Show("Configuration load canceled. No decryption password provided.", "Canceled", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            if (string.IsNullOrWhiteSpace(decryptionPassword))
-            {
-                MessageBox.Show("Configuration load canceled. Decryption password cannot be empty.", "Canceled", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -255,12 +255,17 @@ namespace SwordfishNet_Unified
                     return;
                 }
                 var configData = JsonSerializer.Deserialize<ServerConfigFile>(jsonString);
+                if (configData == null)
+                {
+                    MessageBox.Show("Failed to parse configuration data.", "Load Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
 
-                ServAddrBox.Text = configData.ServerPath;
-                ServSshPortBox.Text = configData.SshPort;
-                ServSftpPortBox.Text = configData.SftpPort;
-                ServHttpPortBox.Text = configData.HttpPort;
-                ServHttpsPortBox.Text = configData.HttpsPort;
+                ServAddrBox.Text = configData.ServerPath ?? "0.0.0.0";
+                ServSshPortBox.Text = configData.SshPort ?? "22";
+                ServSftpPortBox.Text = configData.SftpPort ?? "22";
+                ServHttpPortBox.Text = configData.HttpPort ?? "80";
+                ServHttpsPortBox.Text = configData.HttpsPort ?? "443";
 
                 UserCredentials.Instance.SetCredentials(
                 ServAddrBox.Text.Trim(),
@@ -284,18 +289,13 @@ namespace SwordfishNet_Unified
         {
             try
             {
-                if (UTerminal.Instance != null)
-                    UTerminal.Instance.Shutdown();
-
-                if (OMVFileExp.Instance != null)
-                    OMVFileExp.Instance.CloseSftpConnection();
-
-                if (OMVBrowser.Instance != null && OMVBrowser.Instance.OMVDashboardSlab != null)
-                    OMVBrowser.Instance.OMVDashboardSlab.Dispose();
+                UTerminal.Instance?.Shutdown();
+                OMVFileExp.Instance?.CloseSftpConnection();
+                OMVBrowser.Instance?.OMVDashboardSlab?.Dispose();
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"App Close Crash Prevented: {ex.Message}");
+                MessageBox.Show($"App Close Crash Prevented: {ex.Message}", "App close exception", MessageBoxButton.OK, MessageBoxImage.Asterisk);
             }
             finally
             {

@@ -6,21 +6,21 @@ namespace SwordfishNet_Unified
     {
         private static readonly UserCredentials instance = new UserCredentials();
 
-        public string Username { get; internal set; }
-        public string Password { get; internal set; }
-        public string ServerPath { get; internal set; }
-        public string SshPort { get; internal set; }
-        public string SftpPort { get; internal set; }
-        public string HttpPort { get; internal set; }
-        public string HttpsPort { get; internal set; }
-        public string ConfigPassword { get; internal set; }
+        public string Username { get; internal set; } = string.Empty;
+        public string Password { get; internal set; } = string.Empty;
+        public string ServerPath { get; internal set; } = string.Empty;
+        public string SshPort { get; internal set; } = "22";
+        public string SftpPort { get; internal set; } = "22" ;
+        public string HttpPort { get; internal set; } = "80";
+        public string HttpsPort { get; internal set; } = "443";
+        public string ConfigPassword { get; internal set; } = string.Empty;
 
         private UserCredentials()
         {
-            this.SshPort = "0";
-            this.SftpPort = "0";
-            this.HttpPort = "0";
-            this.HttpsPort = "0";
+            this.SshPort = "22";
+            this.SftpPort = "22";
+            this.HttpPort = "80";
+            this.HttpsPort = "443";
         }
         public static UserCredentials Instance
         {
