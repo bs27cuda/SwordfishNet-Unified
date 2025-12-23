@@ -65,4 +65,28 @@ on deleting.
 ====================================================================================
 LEGAL DISCLAIMER
 
-Unless stated differently by your local laws or regulations
+Unless stated differently by your local laws or regulations, this legal disclaimer
+applies to any and all parts of the items in the present assembly of code. 
+
+This software is not intended for public release with the purpose of achieving 
+any particular work. This software is designed by a person who has no recognized
+training in any of the technologies exposed in this code. By choosing to procure
+for your own use this software implies that you accept that the software may not
+work as intended, may cause irreparable damage to any and all of your devices and
+data that may be in contact with any part of this software, and release Swordfish
+Designs of any and all responsibility in the case of loss or damage of any data or
+equipment in contact with the code. 
+
+Should you procure this software with intent to modify, redistribute, or otherwise
+use any and all parts of, you do so implictly accepting to take all responsibility 
+of any and all loss or damage of data or equipment, whether it be your own or
+another party's. 
+
+PLAIN AND SIMPLE: I am not a professional programmer and I made this software to
+learn the basics of programming. Do not expect professional grade software with
+professional warranties and guarantees from someone who is not a professional. 
+
+Finally, the current software is assembled using NuGet packages available in the
+Visual Studio NuGet browser. Credit goes to Renci, Legend of the Bouncty Castle,
+ProKn1fe as well as Microsoft for the modules that are incorporated in the
+current program. 
