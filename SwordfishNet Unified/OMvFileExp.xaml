@@ -20,7 +20,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="0" Margin="3,50,3,3" VerticalAlignment="Top">
-            <Button x:Name="OpenFolder" Content="Open selected folder in explorer" Height="40" HorizontalAlignment="Stretch" Margin="3" Click="OpenFile_Click"/>
+            <Button x:Name="OpenFolder" Content="Open selected folder in explorer" Height="40" HorizontalAlignment="Stretch" Margin="3" Click="OpenFolder_Click"/>
             <Button x:Name="CpDToServ" Content="Copy folder to server" Height="40" HorizontalAlignment="Stretch" Margin="3"/>
             <Button x:Name="MvDToLocal" Content="Copy folder to local" Height="40" HorizontalAlignment="Stretch" Margin="3"/>
             <Button x:Name="ChNmFolder" Content="Rename folder" Height="40" HorizontalAlignment="Stretch" Margin="3"/>
@@ -44,9 +44,9 @@
 
             <Label Grid.Row="0" Content="LOCAL COMPUTER" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center"/>
 
-            <TreeView x:Name="LocalTree" Grid.Row="1" SelectedItemChanged="LocalTree_SelItemChanged" Margin="3" FontSize="14"/>
+            <TreeView x:Name="LocalTree" Grid.Row="1" SelectedItemChanged="LocalTree_SelItemChanged" Margin="3" FontSize="18"/>
 
-            <ListView x:Name="LocalList" Grid.Row="2" Margin="3" FontSize="14">
+            <ListView x:Name="LocalList" Grid.Row="2" Margin="3" FontSize="18">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="200"/>
@@ -56,7 +56,7 @@
                     </GridView>
                 </ListView.View>
                 <ListView.ContextMenu>
-                    <ContextMenu>
+                    <ContextMenu FontSize="18">
                         <MenuItem Header="open file" Click="OpenFile_Click" InputGestureText="Ctrl+O"/>
                         <Separator />
                         <MenuItem Header="Rename" InputGestureText="F6"/>
@@ -78,9 +78,9 @@
 
             <Label Grid.Row="0" Content="SERVER STORAGE" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center"/>
 
-            <TreeView x:Name="ServerTree" Grid.Row="1" SelectedItemChanged="ServerTree_SelItemChanged" Margin="3" FontSize="14"/>
+            <TreeView x:Name="ServerTree" Grid.Row="1" SelectedItemChanged="ServerTree_SelItemChanged" Margin="3" FontSize="18"/>
 
-            <ListView x:Name="ServerList" Grid.Row="3" Margin="3" FontSize="14">
+            <ListView x:Name="ServerList" Grid.Row="3" Margin="3" FontSize="18">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="200"/>
@@ -90,7 +90,7 @@
                     </GridView>
                 </ListView.View>
                 <ListView.ContextMenu>
-                    <ContextMenu>
+                    <ContextMenu FontSize="18">
                         <MenuItem Header="open file" Click="OpenFile_Click" InputGestureText="Ctrl+O"/>
                         <Separator/>
                         <MenuItem Header="Rename" InputGestureText="F6"/>

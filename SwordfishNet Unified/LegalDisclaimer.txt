@@ -1,0 +1,23 @@
+SwordfishNet Unified is designed by Swordfish Designs
+USe of the current software implies acceptance of the following terms:
+1. License
+   SwordfishNet Unified is licensed under the GNU General Public License v3.0.
+   You may use, modify, and distribute this software under the terms of this license.
+2. Warranty Disclaimer
+   This software is provided "as is", without warranty or guarantee of any kind, express or implied.
+   The author is not liable for any damages arising from the use, compilation, or reproduction of any part of this software.
+   This software is intended for demonstrative purposes only. It is not intended to be used in production environments of any type.
+   It is designed by Swordfish Designs, a single man behind a computer with no recognized computer programming certifications. Use at your own risk. 
+   It is intended to be proof of concept software, and must not be used on any system that you cannot accept a high risk of failure, data loss, or security compromise.
+   It is not intended for publication and is made available to the public for exposition purposes only. Your feedback and suggestions are welcome.
+3. Intellectual Property
+   All intellectual property rights in this software are owned by Swordfish Designs or their respective owners for the various NuGet packages used.
+   You may not use any trademarks, service marks, or logos of Swordfish Designs without prior written permission.
+4. Governing Law
+   This agreement shall be governed by and construed in accordance with the laws of the jurisdiction in which Swordfish Designs operates, without regard to its conflict of law principles.
+   By using SwordfishNet Unified, you acknowledge that you have read, understood, and agree to be bound by these terms and conditions.
+5. Contact Information
+   For any questions regarding this legal disclaimer, please contact Swordfish Designs at bs27cuda@gmail.com
+   You may visit https://swordfish.mydns.me for more information about Swordfish Designs and my projects.
+
+   Swordfish Designs ?MAL 2025

@@ -24,6 +24,14 @@ namespace SwordfishNet_Unified
             InitializeComponent();
             LogoffButton.IsEnabled = false;
         }
+        private void About_Click(object sender, RoutedEventArgs e)
+        {
+            AboutWindow aboutWindow = new()
+            {
+                Owner = Application.Current.MainWindow
+            };
+            aboutWindow.ShowDialog();
+        }
         private void ConnectButton_Click(object sender, RoutedEventArgs e)
         {
             string user = UsernameTextBox.Text.Trim();

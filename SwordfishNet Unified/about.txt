@@ -1,0 +1,10 @@
+Swordfish Designs
+SwordfishNet Unified
+Designed and made available for consultation purposes
+
+NuGet packages used in this project are the property of their respective owners.
+- Microsoft
+- Renci
+- Legion of the Bouncy Castle, Inc.
+- ProKn1fe
+If your content is used in this repository and credit is not given, please contact Swordfish Designs at bs27cuda@gmail.com
