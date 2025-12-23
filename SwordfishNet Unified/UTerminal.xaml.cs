@@ -1,25 +1,33 @@
-﻿using System.Text;
+﻿using Renci.SshNet;
+using Renci.SshNet.Common;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Threading.Tasks;
-using Renci.SshNet;
-using Renci.SshNet.Common;
 
 namespace SwordfishNet_Unified
 {
     public partial class UTerminal : Page
     {
+        [GeneratedRegex(@"\x1B\[[0-?]*[ -/]*[@-~]")]
+        private static partial Regex AnsiEscapeRegex();
+
+        [GeneratedRegex(@"\x1B\][^\x07\x0A\x0D]*[\x07\x0A\x0D]")]
+        private static partial Regex ControlSequenceRegex();
+
+        [GeneratedRegex(@"\u0000")]
+        private static partial Regex NullCharRegex();
+
         private static UTerminal? _instance;
         public static UTerminal Instance => _instance ??= new UTerminal();
 
         private SshClient? _sshClient;
         private ShellStream? _shellStream;
-        private readonly List<string> _commandHistory = new();
+        private readonly List<string> _commandHistory = [];
         private int _historyIndex = -1;
-        private string CurrentPrompt => GetPrompt();
-        private int PromptLength => CurrentPrompt.Length;
+        private static string CurrentPrompt => GetPrompt();
+        private static int PromptLength => CurrentPrompt.Length;
 
         public UTerminal()
         {
@@ -28,6 +36,7 @@ namespace SwordfishNet_Unified
             this.Loaded += UTerminal_Loaded;
             this.Unloaded += UTerminal_Unloaded;
         }
+
         private async void UTerminal_Loaded(object sender, RoutedEventArgs e)
         {
             if (!UserCredentials.Instance.AreCredentialsSetSsh())
@@ -36,12 +45,14 @@ namespace SwordfishNet_Unified
             }
             await UTerminal_ConnectAsync();
         }
+
         public void Shutdown()
         {
             if (_shellStream != null)
             {
                 _shellStream.DataReceived -= ShellStream_DataReceived;
             }
+
             Task.Run(() =>
             {
                 try
@@ -68,6 +79,7 @@ namespace SwordfishNet_Unified
                     System.Diagnostics.Debug.WriteLine($"Network Cleanup Error: {ex.Message}");
                 }
             });
+
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 try
@@ -80,6 +92,7 @@ namespace SwordfishNet_Unified
                 catch { /* Page might already be unloaded */ }
             }));
         }
+
         private async Task UTerminal_ConnectAsync()
         {
             string host = UserCredentials.Instance.ServerPath;
@@ -121,18 +134,20 @@ namespace SwordfishNet_Unified
                 AppendToTerminal($"Connection Failed: {ex.Message}");
             }
         }
+
         private void ShellStream_DataReceived(object? sender, ShellDataEventArgs e)
         {
             string output = Encoding.UTF8.GetString(e.Data);
-            string cleanOutput = Regex.Replace(output, @"\x1B\[[0-?]*[ -/]*[@-~]", string.Empty);
-            cleanOutput = Regex.Replace(cleanOutput, @"\x1B\][^\x07\x0A\x0D]*[\x07\x0A\x0D]", string.Empty);
-            cleanOutput = Regex.Replace(cleanOutput, @"\u0000", string.Empty);
+            string cleanOutput = AnsiEscapeRegex().Replace(output, string.Empty);
+            cleanOutput = ControlSequenceRegex().Replace(cleanOutput, string.Empty);
+            cleanOutput = NullCharRegex().Replace(cleanOutput, string.Empty);
             Dispatcher.Invoke(() =>
             {
                 TerminalOutput!.AppendText(cleanOutput);
                 TerminalOutput.ScrollToEnd();
             });
         }
+
         private void ExecuteCommand()
         {
             if (_shellStream == null || !_shellStream.CanWrite)
@@ -154,25 +169,26 @@ namespace SwordfishNet_Unified
             }
             else
             {
-                _shellStream.WriteLine(""); // Send empty enter
+                _shellStream.WriteLine(string.Empty); // Send empty enter
             }
 
             TerminalInput.Text = CurrentPrompt;
             TerminalInput.CaretIndex = TerminalInput.Text.Length;
         }
+
         private void AppendToTerminal(string text)
         {
             TerminalOutput!.AppendText($"{text}\n");
             TerminalOutput.ScrollToEnd();
         }
-        private static string GetPrompt()
-        {
-            return "$ ";
-        }
+
+        private static string GetPrompt() => "$ ";
+
         private void UTerminal_Unloaded(object sender, RoutedEventArgs e)
         {
-            // Left empty to keep terminal connected when navigating tabs
+            // Intentionally empty to keep terminal connected when navigating tabs
         }
+
         private void TerminalInput_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -195,12 +211,14 @@ namespace SwordfishNet_Unified
                 TerminalInput.CaretIndex = TerminalInput.Text.Length;
             }
         }
+
         private void TerminalInput_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             // Block backspace/delete from eating the prompt
             if (e.Key == Key.Back && TerminalInput!.CaretIndex <= PromptLength) e.Handled = true;
             if (e.Key == Key.Delete && TerminalInput.CaretIndex < PromptLength) e.Handled = true;
         }
+
         private void TerminalInput_SelectionChanged(object sender, RoutedEventArgs e)
         {
             if (!TerminalInput!.IsEnabled || string.IsNullOrEmpty(TerminalInput.Text))
@@ -210,6 +228,7 @@ namespace SwordfishNet_Unified
                 TerminalInput.CaretIndex = PromptLength;
             }
         }
+
         private void TerminalInput_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             // Prevent cutting or pasting over the prompt
