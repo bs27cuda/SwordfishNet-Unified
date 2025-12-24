@@ -1,23 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection.PortableExecutable;
-using System.Text;
+﻿using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Resources;
-using System.Windows.Shapes;
 
 namespace SwordfishNet_Unified
 {
-    /// <summary>
-    /// Interaction logic for AboutWindow.xaml
-    /// </summary>
     public partial class AboutWindow : Window
     {
         public AboutWindow()
@@ -50,7 +36,16 @@ namespace SwordfishNet_Unified
         }
         private void ShowLegal(object sender, RoutedEventArgs e)
         {
-            // Open the Legal window
+            Uri legalUri = new Uri("pack://application:,,,/legal.txt");
+            StreamResourceInfo legal = Application.GetResourceStream(legalUri);
+            if (legal != null)
+            {
+                using (StreamReader reader = new StreamReader(legal.Stream))
+                {
+                    string content = reader.ReadToEnd();
+                    MessageBox.Show(content, "Legal disclaimer", MessageBoxButton.OK, MessageBoxImage.None);
+                }
+            }
         }
     }
 }

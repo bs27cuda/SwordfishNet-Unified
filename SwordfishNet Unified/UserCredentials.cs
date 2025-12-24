@@ -14,6 +14,7 @@ namespace SwordfishNet_Unified
         public string HttpPort { get; internal set; } = "80";
         public string HttpsPort { get; internal set; } = "443";
         public string ConfigPassword { get; internal set; } = string.Empty;
+        public static string unicorn = "We are all pink!";
 
         private UserCredentials()
         {

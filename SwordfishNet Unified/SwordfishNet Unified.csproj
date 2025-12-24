@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <Resource Include="about.txt" />
+    <Resource Include="legal.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,5 +40,4 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
 </Project>
