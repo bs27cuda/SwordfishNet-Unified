@@ -4,23 +4,29 @@ namespace SwordfishNet_Unified
 {
     public partial class MainWindow : Window
     {
-        public static MainWindow Instance { get; private set; } = null!;
+        public static MainWindow Instance { get; private set; } = null!; // Singleton instance
         public MainWindow()
         {
             InitializeComponent();
             Instance = this;
+
+            // Navigate to singleton instances of the pages
             ServerConfigFrame.Navigate(ServerConfigPage.Instance);
             OMVBrowserFrame.Navigate(OMVBrowser.Instance);
             OMVFileExpFrame.Navigate(OMVFileExp.Instance);
             TerminalFrame.Navigate(UTerminal.Instance);
-            FileExpTab.IsEnabled = false;
+
+            // Initially disable all tabs except the Services tab
+            FileExpTab.IsEnabled = false; 
             TermTab.IsEnabled = false;
             NASPortalTab.IsEnabled = false;
             ServTab.IsSelected = true;
             ServTab.IsEnabled = true;
+
+            // You must call SetEnabledTabs(true) to enable the tabs once a server is connected
             SetEnabledTabs(false);
         }
-        public void SetEnabledTabs(bool isEnabled)
+        public void SetEnabledTabs(bool isEnabled) // Enable or disable tabs based on server connection status
         {
             FileExpTab.IsEnabled = isEnabled;
             TermTab.IsEnabled = isEnabled;

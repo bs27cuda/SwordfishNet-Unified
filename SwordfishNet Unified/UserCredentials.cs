@@ -2,10 +2,15 @@
 
 namespace SwordfishNet_Unified
 {
+    // Singleton class to store user credentials
+    // Ensures only one instance exists throughout the application
+    // Provides methods to set, clear, and check credentials
     public sealed class UserCredentials
     {
+        // Static instance of the singleton
         private static readonly UserCredentials instance = new UserCredentials();
 
+        // Properties to hold user credentials
         public string Username { get; internal set; } = string.Empty;
         public string Password { get; internal set; } = string.Empty;
         public string ServerPath { get; internal set; } = string.Empty;
@@ -14,19 +19,21 @@ namespace SwordfishNet_Unified
         public string HttpPort { get; internal set; } = "80";
         public string HttpsPort { get; internal set; } = "443";
         public string ConfigPassword { get; internal set; } = string.Empty;
-        public static string unicorn = "We are all pink!";
+        public static string unicorn = "We are all pink!"; // Easter egg
 
-        private UserCredentials()
+        private UserCredentials() // Private constructor to prevent instantiation and set default port values to avoid null references
         {
             this.SshPort = "22";
             this.SftpPort = "22";
             this.HttpPort = "80";
             this.HttpsPort = "443";
         }
-        public static UserCredentials Instance
+        public static UserCredentials Instance // Public property to access the singleton instance
         {
-            get { return instance; }
+            get { return instance; } // Return the single instance
         }
+
+        // Method to set user credentials
         public void SetCredentials(string serverPath, string username, string password, string sshPort, string sftpPort, string httpPort, string httpsPort)
         {
             this.ServerPath = serverPath;
@@ -39,7 +46,7 @@ namespace SwordfishNet_Unified
             this.ConfigPassword = password;
         }
         
-        public void ClearCredentials()
+        public void ClearCredentials() // Method to clear user credentials
         {
             this.ServerPath = string.Empty;
             this.Username = string.Empty;
@@ -51,7 +58,7 @@ namespace SwordfishNet_Unified
             this.ConfigPassword = string.Empty;
         }
 
-        public bool AreCredentialsSetBrowser()
+        public bool AreCredentialsSetBrowser() // Method to check if all credentials are set for browser connections
         {
             return !string.IsNullOrEmpty(Username) &&
                    !string.IsNullOrEmpty(Password) &&
@@ -59,7 +66,7 @@ namespace SwordfishNet_Unified
                    !string.IsNullOrEmpty(SftpPort);
         }
 
-        public bool AreCredentialsSetSsh()
+        public bool AreCredentialsSetSsh() // Method to check if all credentials are set for SSH connections
         {
             return !string.IsNullOrEmpty(Username) &&
                    !string.IsNullOrEmpty(Password) &&
@@ -67,7 +74,7 @@ namespace SwordfishNet_Unified
                    !string.IsNullOrEmpty(SshPort);
         }
 
-        public bool AreCredentialsSetWeb()
+        public bool AreCredentialsSetWeb() // Method to check if all credentials are set for web connections
         {
             return !string.IsNullOrEmpty(Username) &&
                    !string.IsNullOrEmpty(Password) &&
