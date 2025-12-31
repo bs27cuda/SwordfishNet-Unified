@@ -6,61 +6,73 @@
       xmlns:local="clr-namespace:SwordfishNet_Unified"
       mc:Ignorable="d" 
       d:DesignHeight="800" d:DesignWidth="1200"
-      Background="AliceBlue"
       Title="ServerConfigPage">
+
+    <Page.Resources>
+        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+
+        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+        </Style>
+    </Page.Resources>
 
     <Grid HorizontalAlignment="Center" Margin="0,25,0,0">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="35" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
+            <RowDefinition Height="30" />
             <RowDefinition Height="50" />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="50" />
-            <RowDefinition Height="50" />
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="230" />
+            <ColumnDefinition Width="200" />
             <ColumnDefinition Width="350"/>
         </Grid.ColumnDefinitions>
 
         <Label Grid.Row="0" Content="Please ensure that all settings on this page are valid." Grid.ColumnSpan="2"  FontSize="18" Margin="15,0,0,0" Padding="3"/>
         <Label Grid.Row="1" Content="They will be used to configure your connections to various services." Grid.ColumnSpan="2"  FontSize="18" Margin="15,0,0,0" Padding="3"/>
 
-        <Label Content="Server address:" FontSize="22" Margin="20,0,0,0" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"/>
-        <TextBox x:Name="ServAddrBox" Width="300" Height="30" FontSize="18" Margin="10,0,0,0" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left"/>
-        <Label Content="Server SSH port:" FontSize="22" Margin="20,0,0,0" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right"/>
-        <TextBox x:Name="ServSshPortBox" Width="300" Height="30" FontSize="18" Margin="10,0,0,0" Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left"/>
-        <Label Content="Server sFTP port:" FontSize="22" Margin="20,0,0,0" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right"/>
-        <TextBox x:Name="ServSftpPortBox" Width="300" Height="30" FontSize="18" Margin="10,0,0,0" Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left"/>
-        <Label Content="Server HTTP port:" FontSize="22" Margin="20,0,0,0" Grid.Row="5" Grid.Column="0" HorizontalAlignment="Right"/>
-        <TextBox x:Name="ServHttpPortBox" Width="300" Height="30" FontSize="18" Margin="10,0,0,0" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left"/>
-        <Label Content="Server HTTPS port:" FontSize="22" Margin="20,0,0,0" Grid.Row="6" Grid.Column="0" HorizontalAlignment="Right"/>
-        <TextBox x:Name="ServHttpsPortBox" Width="300" Height="30" FontSize="18" Margin="10,0,0,0" Grid.Row="6" Grid.Column="1" HorizontalAlignment="Left"/>
+        <Label Content="Server address:" Margin="20,0,0,0" Grid.Row="2" Grid.Column="0" HorizontalAlignment="Right"/>
+        <TextBox x:Name="ServAddrBox" Grid.Row="2" Grid.Column="1"/>
+        <Label Content="Server SSH port:" Margin="20,0,0,0" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Right"/>
+        <TextBox x:Name="ServSshPortBox" Grid.Row="3" Grid.Column="1"/>
+        <Label Content="Server sFTP port:"  Margin="20,0,0,0" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Right"/>
+        <TextBox x:Name="ServSftpPortBox" Grid.Row="4" Grid.Column="1"/>
+        <Label Content="Server HTTP port:"  Margin="20,0,0,0" Grid.Row="5" Grid.Column="0" HorizontalAlignment="Right"/>
+        <TextBox x:Name="ServHttpPortBox" Grid.Row="5" Grid.Column="1"/>
+        <Label Content="Server HTTPS port:"  Margin="20,0,0,0" Grid.Row="6" Grid.Column="0" HorizontalAlignment="Right"/>
+        <TextBox x:Name="ServHttpsPortBox" Grid.Row="6" Grid.Column="1"/>
         
         <Grid Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="SaveServerConfig" Content="SAVE NETWORK CONFIG" Grid.Column="0" Margin="10,0,10,0" Click="SaveServerConfiguration" Grid.Row="7"/>
-            <Button x:Name="LoadServerConfig" Content="LOAD NETWORK CONFIG" Grid.Column="1" Margin="10,0,10,0" Click="LoadServerConfiguration" Grid.Row="7"/>
+            <Button x:Name="SaveServerConfig" Content="SAVE NETWORK CONFIG" Grid.Column="0" Click="SaveServerConfiguration" Grid.Row="7"/>
+            <Button x:Name="LoadServerConfig" Content="LOAD NETWORK CONFIG" Grid.Column="1" Click="LoadServerConfiguration" Grid.Row="7"/>
         </Grid>
-        <Grid Grid.Row="8" Grid.ColumnSpan="2">
-            <StackPanel Margin="5">
-                <Label Content="Username:" FontSize="16" Margin="0,0,0,5"/>
-                <TextBox x:Name="UsernameTextBox" Height="30" FontSize="16" Margin="0,0,0,5" KeyDown="GotoPass" VerticalContentAlignment="Center"/>
 
-                <Label Content="Password:" FontSize="16" Margin="0,0,0,5"/>
-                <PasswordBox x:Name="PasswordBox" Height="30" FontSize="16" Margin="0,0,0,5" PasswordChar="×" KeyDown="DoLogin" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+        <Label Content="Username:" Grid.Row="8" Grid.Column="0" HorizontalAlignment="Right"/>
+        <TextBox x:Name="UsernameTextBox" Grid.Row="8" Grid.Column="1" KeyDown="GotoPass"/>
 
-                <Button x:Name="LoginButton" Content="Login" Height="40" FontSize="16" Background="#FFbb11" Foreground="White" Click="ConnectButton_Click"/>
-                <Button x:Name="LogoffButton" Content="Log Off" Height="40" FontSize="16" Background="DarkRed" Foreground="White" Margin="0,10,0,0" Click="LogoffButton_Click"/>
-                <Button x:Name="CloseApp" Content="EXIT" Height="40" FontSize="16" Background="Black" Foreground="White" Margin="0,10,0,0" Click="CloseApp_Click"/>
-                <Button x:Name="About" Content="ABOUT" Height="40" FontSize="16" Background="Gray" Foreground="White" Margin="0,10,0,0" Click="About_Click"/>
-            </StackPanel>
-        </Grid>
+        <Label Content="Password:" Grid.Row="9" Grid.Column="0" HorizontalAlignment="Right"/>
+        <PasswordBox x:Name="PasswordBox" Grid.Row="9" Grid.Column="1" KeyDown="DoLogin"/>
+
+        <Button x:Name="LoginButton" Content="LOG IN" Grid.Row="10" Grid.ColumnSpan="2" Background="{StaticResource BGYellow}" Click="ConnectButton_Click"/>
+        <Button x:Name="LogoffButton" Content="LOG OFF" Grid.Row="11"  Grid.ColumnSpan="2" Background="{StaticResource BGRed}" Click="LogoffButton_Click"/>
+        <Button x:Name="CloseApp" Content="EXIT" Grid.Row="12" Grid.ColumnSpan="2" Background="{StaticResource BGBlack}" Click="CloseApp_Click"/>
+        <Button x:Name="About" Content="ABOUT" Grid.Row="13" Grid.ColumnSpan="2" Background="{StaticResource BorderBrush}" Click="About_Click"/>
     </Grid>
 </Page>

@@ -221,7 +221,7 @@ namespace SwordfishNet_Unified
                 MessageBox.Show($"Failed to save encrypted configuration: {ex.Message}", "Encryption Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            SaveServerConfig.Background = Brushes.LightGreen; // Visual feedback for successful save
+            SaveServerConfig.Background = Brushes.Green; // Visual feedback for successful save
 
             DispatcherTimer timer = new() // Timer to reset button color
             {
@@ -229,7 +229,8 @@ namespace SwordfishNet_Unified
             };
             timer.Tick += (s, args) =>
             {
-                SaveServerConfig.Background = Brushes.LightGray;
+                SaveServerConfig.Background = (Brush)Application.Current.FindResource("Background");
+                
                 timer.Stop();
             };
             timer.Start();

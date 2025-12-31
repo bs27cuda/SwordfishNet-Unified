@@ -10,17 +10,11 @@
         MinHeight="800" MinWidth="1200"
         ResizeMode="CanResize">
 
+    
+    
     <Grid>
-        <TabControl Background="Bisque" IsTabStop="True">
-            <TabControl.Resources>
-                <Style TargetType="TabItem">
-                    <Setter Property="FontSize" Value="20"/>
-                    <Setter Property="FontWeight" Value="SemiBold"/>
-                    <Setter Property="Padding" Value="30,10"/>
-                    <Setter Property="FontFamily" Value="Segoe Print"/>
-                </Style>
-            </TabControl.Resources>
-
+        <TabControl IsTabStop="True">
+            
             <TabControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>

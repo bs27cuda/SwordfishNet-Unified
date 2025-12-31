@@ -47,5 +47,9 @@ namespace SwordfishNet_Unified
                 }
             }
         }
+        private void CloseWindow (object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

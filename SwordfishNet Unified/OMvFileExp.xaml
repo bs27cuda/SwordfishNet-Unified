@@ -23,16 +23,110 @@
             <Button x:Name="OpenFolder" Content="Open selected folder in explorer" Height="40" HorizontalAlignment="Stretch" Margin="3" Click="OpenFolder_Click"/>
             <Button x:Name="CpDToServ" Content="Copy folder to server" Height="40" HorizontalAlignment="Stretch" Margin="3"/>
             <Button x:Name="MvDToLocal" Content="Copy folder to local" Height="40" HorizontalAlignment="Stretch" Margin="3"/>
-            <Button x:Name="ChNmFolder" Content="Rename folder" Height="40" HorizontalAlignment="Stretch" Margin="3"/>
-            <Button x:Name="RmDir" Content="DELETE folder" Height="40" HorizontalAlignment="Stretch" Margin="3"/>
+            <Button x:Name="ChNmFolder" Content="Rename folder" Height="40" HorizontalAlignment="Stretch" Margin="3">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="InnerBorder" 
+                                Background="{StaticResource Background}" 
+                                BorderBrush="{StaticResource BorderBrush}" 
+                                BorderThickness="2" 
+                                CornerRadius="4">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="InnerBorder" Property="Background" Value="{StaticResource BGYellow}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+            
+            <Button x:Name="RmDir" Content="DELETE folder" Height="40" HorizontalAlignment="Stretch" Margin="3">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="InnerBorder" 
+                                Background="{StaticResource Background}" 
+                                BorderBrush="{StaticResource BorderBrush}" 
+                                BorderThickness="2" 
+                                CornerRadius="4">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="InnerBorder" Property="Background" Value="{StaticResource BGRed}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
         </StackPanel>
 
         <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1" Margin="3" VerticalAlignment="Bottom">
             <Button x:Name="OpenFile" Content="Open selected file..." Height="40" HorizontalAlignment="Stretch" Margin="3" Click="OpenFile_Click"/>
             <Button x:Name="CpFToServ" Content="Copy file to server" Height="40" HorizontalAlignment="Stretch" Margin="3"/>
             <Button x:Name="CpFToLocal" Content="Copy file to local" Height="40" HorizontalAlignment="Stretch" Margin="3"/>
-            <Button x:Name="ChNmFile" Content="Rename file" Height="40" HorizontalAlignment="Stretch" Margin="3"/>
-            <Button x:Name="RmFile" Content="DELETE file" Height="40" HorizontalAlignment="Stretch" Margin="3" Click="DeleteFile_Click"/>
+            <Button x:Name="ChNmFile" Content="Rename file" Height="40" HorizontalAlignment="Stretch" Margin="3">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="InnerBorder" 
+                                Background="{StaticResource Background}" 
+                                BorderBrush="{StaticResource BorderBrush}" 
+                                BorderThickness="2" 
+                                CornerRadius="4">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="InnerBorder" Property="Background" Value="{StaticResource BGYellow}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
+
+            <Button x:Name="RmFile" Content="DELETE file" Height="40" HorizontalAlignment="Stretch" Margin="3" Click="DeleteFile_Click">
+                <Button.Style>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="InnerBorder" 
+                                Background="{StaticResource Background}" 
+                                BorderBrush="{StaticResource BorderBrush}" 
+                                BorderThickness="2" 
+                                CornerRadius="4">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="InnerBorder" Property="Background" Value="{StaticResource BGRed}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </Button.Style>
+            </Button>
         </StackPanel>
 
         <Grid Grid.Column="0" Grid.RowSpan="2" Margin="3" Background="#FFAADDEE">

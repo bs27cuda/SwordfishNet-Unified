@@ -5,9 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SwordfishNet_Unified"
         mc:Ignorable="d"
-        Title="About SwordfishNet Unified" Height="300" Width="600">
+        Title="About SwordfishNet Unified" 
+        Height="320" Width="600"
+        Background="{StaticResource Background}"
+        ResizeMode="NoResize">
     <Grid>
-        <TextBox x:Name="Aboutblock" TextWrapping="Wrap" VerticalAlignment="Top" Padding="10" FontSize="12" Foreground="Black"/>
-        <Button x:Name="Legal" Content="Legal disclaimer" Width="100" Height="30" VerticalAlignment="Bottom" Margin="20" Click="ShowLegal"/>
+        <TextBlock x:Name="Aboutblock" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Stretch" Padding="10"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="Close" Content="Close" Width="150" Height="36" VerticalAlignment="Bottom" Margin="20" Click="CloseWindow"/>
+            <Button x:Name="Legal" Content="Legal disclaimer" Width="150" Height="36" VerticalAlignment="Bottom" Margin="20" Click="ShowLegal"/>
+        </StackPanel>
     </Grid>
 </Window>
