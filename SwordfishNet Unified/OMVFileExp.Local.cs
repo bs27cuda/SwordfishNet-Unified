@@ -1,99 +1,128 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.FileIO;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using Microsoft.VisualBasic.FileIO;
+using System.Windows.Input;
+
 
 namespace SwordfishNet_Unified
 {
     public partial class OMVFileExp
     {
-        private void LoadDriveRoots() // Load local drive roots into the tree view
-        {
-            foreach (string drive in Directory.GetLogicalDrives()) // Iterate through each logical drive
-            {
-                TreeViewItem item = new() // Create a new tree view item for the drive
-                {
-                    Header = drive,
-                    Tag = drive
-                };
-                item.Items.Add(null); // Placeholder for lazy loading of subdirectories
-                item.Expanded += LocalTreeItem_Expanded; // Attach expanded event handler
-                LocalTree.Items.Add(item); // Add the drive item to the tree view
-            }
-        }
-        private void LocalTreeItem_Expanded(object sender, RoutedEventArgs e) // Handle expansion of tree view items
-        {
-            if (sender is TreeViewItem tvi) // Check if the sender is a TreeViewItem
-            {
-                // If the item has only the placeholder, load its subdirectories
-                try
-                {
-                    tvi.IsSelected = true;
-                    tvi.Focus();
-                    _lastActive = ActivePane.Local;
-                    e.Handled = true;
-                }
-                catch {/*ignore error*/} // Ignore any exceptions that occur during selection/focus
-            }
-        }
-        private void LocalTree_SelItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e) // Handle selection changes in the local tree view
-        {
-            if (e.NewValue is TreeViewItem selectedItem) // Check if the new selected item is a TreeViewItem
-            {
-                if (selectedItem.Tag is string path) // Get the path from the item's tag
-                {
-                    _currentLocalPath = path;
-                    DisplayLocalFiles(path);
-
-                    // If the item has only the placeholder, load its subdirectories
-                    if (selectedItem.Items.Count == 1 && selectedItem.Items[0] == null)
-                    {
-                        selectedItem.Items.Clear();
-                        LoadLocalSubdirectories(selectedItem, path);
-                    }
-                }
-            }
-        }
-        private void LoadLocalSubdirectories(TreeViewItem parentItem, string parentPath) // Load subdirectories for a given tree view item
+        private void DisplayLocalFiles(string? path)
         {
             try
             {
-                foreach (string dir in Directory.GetDirectories(parentPath)) // Iterate through each subdirectory
-                {
-                    TreeViewItem item = new() // Create a new tree view item for the subdirectory
-                    {
-                        Header = new DirectoryInfo(dir).Name,
-                        Tag = dir
-                    };
-                    item.Items.Add(null); // Placeholder for lazy loading of further subdirectories
-                    item.Expanded += LocalTreeItem_Expanded; // Attach expanded event handler
-                    parentItem.Items.Add(item); // Add the subdirectory item to the parent item
-                }
-            }
-            catch { /*ignore access denied errors*/ } // Ignore any exceptions that occur during directory access
-        }
-        private void DisplayLocalFiles(string path) // Display files in the local list view for a given path
-        {
-            LocalList.Items.Clear(); // Clear existing items in the list view
+                LocalList.Items.Clear();
 
-            // Load directories
-            try
-            {
-                foreach (string file in Directory.GetFiles(path)) // Iterate through each file in the directory
+                if (string.IsNullOrEmpty(path))
                 {
-                    FileInfo info = new(file); // Get file information
+                    ShowThisPC(); // Helper to show drives
+                    return;
+                }
+
+                _currentLocalPath = path;
+                LocalPathBox.Text = path;
+
+                DirectoryInfo di = new(path);
+
+                // Load Folders
+                foreach (var dir in di.GetDirectories())
+                {
                     LocalList.Items.Add(new
                     {
-                        info.Name,
-                        Size = (info.Length / 1024).ToString("N0") + " kb",
-                        info.Extension,
-                        Modified = info.LastWriteTime.ToString("yyyy-MM-dd HH:mm:ss")
-                    }); // Add file details to the list view
+                        Icon = "📁",
+                        dir.Name,
+                        Size = "<DIR>",
+                        Modified = dir.LastWriteTime.ToString("g"),
+                        IsFolder = true,
+                        IsDrive = false,
+                        FullPath = dir.FullName
+                    });
+                }
+
+                // Load Files
+                foreach (var file in di.GetFiles())
+                {
+                    LocalList.Items.Add(new
+                    {
+                        Icon = "📄",
+                        file.Name,
+                        Size = (file.Length / 1024).ToString("N0") + " KB",
+                        Modified = file.LastWriteTime.ToString("g"),
+                        IsFolder = false,
+                        IsDrive = false,
+                        FullPath = file.FullName
+                    });
                 }
             }
-            catch { /*ignore access denied errors*/} // Ignore any exceptions that occur during file access
+            catch (UnauthorizedAccessException)
+            {
+                MessageBox.Show("Access Denied to this folder.", "Security", MessageBoxButton.OK, MessageBoxImage.Stop);
+                // Optional: Go back to This PC or parent
+                DisplayLocalFiles(null);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void ShowThisPC()
+        {
+            _currentLocalPath = null;
+            LocalPathBox.Text = "This PC";
+            foreach (string drive in Directory.GetLogicalDrives())
+            {
+                var di = new DriveInfo(drive);
+                if (di.IsReady)
+                {
+                    LocalList.Items.Add(new
+                    {
+                        Icon = "💻",
+                        Name = drive,
+                        Size = di.DriveType.ToString(),
+                        Modified = "",
+                        IsFolder = true,
+                        IsDrive = true,
+                        FullPath = drive
+                    });
+                }
+            }
+        }
+        private void LocalList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            // Use dynamic to access the properties of the anonymous object we added to the list
+            dynamic selected = LocalList.SelectedItem;
+            if (selected == null) return;
+
+            // Check if the item is a folder or a drive
+            if (selected.IsFolder)
+            {
+                string newPath = selected.FullPath;
+
+                // Ensure the path ends with a backslash if it's a drive (e.g., "C:" -> "C:\")
+                if (!(!selected.IsDrive || newPath.EndsWith(@"\\")))
+                {
+                    newPath += "\\";
+                }
+
+                DisplayLocalFiles(newPath);
+            }
+            else
+            {
+                TryOpenLocal(); // Existing logic for files
+            }
+        }
+        private void LocalUp_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(_currentLocalPath)) return;
+
+            DirectoryInfo parent = Directory.GetParent(_currentLocalPath);
+            if (parent != null)
+            {
+                DisplayLocalFiles(parent.FullName);
+            }
         }
         private bool TryOpenLocal() // Try to open the selected file in the local list view
         {

@@ -132,33 +132,34 @@
         <Grid Grid.Column="0" Grid.RowSpan="2" Margin="3" Background="#FFAADDEE">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
             <Label Grid.Row="0" Content="LOCAL COMPUTER" FontSize="16" FontWeight="SemiBold" HorizontalAlignment="Center"/>
 
-            <TreeView x:Name="LocalTree" Grid.Row="1" SelectedItemChanged="LocalTree_SelItemChanged" Margin="3" FontSize="18"/>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5">
+                <Button Content="Up" Width="40" Click="LocalUp_Click" Margin="0,0,5,0"/>
+                <TextBox x:Name="LocalPathBox" Text="{Binding _currentLocalPath}" Width="435" IsReadOnly="True" VerticalContentAlignment="Center"/>
+            </StackPanel>
 
-            <ListView x:Name="LocalList" Grid.Row="2" Margin="3" FontSize="18">
+            <ListView x:Name="LocalList" Grid.Row="2" Margin="3" FontSize="18" MouseDoubleClick="LocalList_MouseDoubleClick">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" Width="200"/>
+                        <GridViewColumn Header="Name" Width="250">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Icon}" Margin="0,0,5,0"/>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
                         <GridViewColumn Header="Size" DisplayMemberBinding="{Binding Size}" Width="100"/>
-                        <GridViewColumn Header="Type" DisplayMemberBinding="{Binding Extension}" Width="100"/>
-                        <GridViewColumn Header="Date Modified" DisplayMemberBinding="{Binding Modified}" Width="150"/>
+                        <GridViewColumn Header="Modified" DisplayMemberBinding="{Binding Modified}" Width="150"/>
                     </GridView>
                 </ListView.View>
-                <ListView.ContextMenu>
-                    <ContextMenu FontSize="18">
-                        <MenuItem Header="open file" Click="OpenFile_Click" InputGestureText="Ctrl+O"/>
-                        <Separator />
-                        <MenuItem Header="Rename" InputGestureText="F6"/>
-                        <MenuItem Header="Delete" InputGestureText="Del" Click="DeleteFile_Click"/>
-                        <Separator/>
-                        <MenuItem Header="Copy to Server" InputGestureText="Ctrl+Shift+S"/>
-                    </ContextMenu>
-                </ListView.ContextMenu>
             </ListView>
         </Grid>
 

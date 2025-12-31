@@ -56,14 +56,13 @@ namespace SwordfishNet_Unified
 
                 // Ensure these methods handle a null _sftpClient or use the field directly
                 LoadServerRoots();
-                LoadDriveRoots();
+                ShowThisPC();
             }
             catch (Exception ex) // Handle connection errors
             {
                 MessageBox.Show($"Failed to connect: {ex.Message}", "Connection Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         public void CloseSftpConnection() // Close SFTP connection method
         {
             if (_sftpClient != null) // If SFTP client exists

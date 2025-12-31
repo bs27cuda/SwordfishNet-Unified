@@ -68,18 +68,94 @@
                                 <Setter TargetName="TabBorder" Property="Background" Value="{StaticResource BorderBrush}"/>
                                 <Setter TargetName="TabBorder" Property="BorderThickness" Value="2,2,2,0"/>
                             </Trigger>
-                       
+
                             <Trigger Property="IsEnabled" Value="False">
                                 <Setter Property="Background" Value="{StaticResource BGDisabled}"/>
                                 <Setter Property="Foreground" Value="{StaticResource FGDisabled}"/>
                             </Trigger>
-                            
+
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
 
+        <Style TargetType="{x:Type GridViewColumnHeader}">
+            <Setter Property="Foreground" Value="{StaticResource Foreground}"/>
+            <Setter Property="Background" Value="{StaticResource BGDisabled}"/>
+            <Setter Property="Padding" Value="10,5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                        <Grid>
+                            <Border x:Name="HeaderBorder" 
+                                Background="{TemplateBinding Background}" 
+                                BorderThickness="0,0,1,1" 
+                                BorderBrush="#D2D2D2">
+                                <ContentPresenter Margin="{TemplateBinding Padding}" 
+                                              VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="HeaderBorder" Property="Background" Value="#E5F3FF"/>
+                                <Setter Property="Foreground" Value="Black"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type ListViewItem}">
+            <Setter Property="Foreground" Value="{StaticResource Background}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Padding" Value="2,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListViewItem}">
+                        <Border x:Name="Bd" 
+                        Background="{StaticResource Background}" 
+                        BorderThickness="0" 
+                        Padding="{TemplateBinding Padding}" 
+                        SnapsToDevicePixels="true">
+
+                            <GridViewRowPresenter VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          Content="{TemplateBinding Content}"
+                                          Columns="{TemplateBinding GridView.ColumnCollection}"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#E5F3FF"/>
+                                <Setter Property="Foreground" Value="{StaticResource Background}"/>
+                            </Trigger>
+
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Bd" Property="Background" Value="#0078D7"/>
+                                <Setter Property="Foreground" Value="{StaticResource BGDisabled}"/>
+                            </Trigger>
+
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="True"/>
+                                    <Condition Property="Selector.IsSelectionActive" Value="False"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="Bd" Property="Background" Value="#DCDCDC"/>
+                                <Setter Property="Foreground" Value="{StaticResource Background}"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type ListView}">
+            <Setter Property="Background" Value="{StaticResource Background}"/>
+            <Setter Property="BorderBrush" Value="#828790"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Visible"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Visible"/>
+        </Style>
 
         <Style TargetType="Button">
             <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>

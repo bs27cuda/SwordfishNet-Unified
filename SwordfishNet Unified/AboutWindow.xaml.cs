@@ -15,14 +15,12 @@ namespace SwordfishNet_Unified
         {
             try
             {
-                Uri resourceUri = new Uri("pack://application:,,,/about.txt"); // Path to the embedded resource
+                Uri resourceUri = new("pack://application:,,,/about.txt"); // Path to the embedded resource
                 StreamResourceInfo resource = Application.GetResourceStream(resourceUri); // Get the resource stream
                 if (resource != null) // Check if the resource was found, and read it
                 {
-                    using (StreamReader reader = new StreamReader(resource.Stream))
-                    {
-                        Aboutblock.Text = reader.ReadToEnd();
-                    }
+                    using StreamReader reader = new(resource.Stream);
+                    Aboutblock.Text = reader.ReadToEnd();
                 }
                 else // Resource not found
                 {
@@ -36,18 +34,16 @@ namespace SwordfishNet_Unified
         }
         private void ShowLegal(object sender, RoutedEventArgs e)
         {
-            Uri legalUri = new Uri("pack://application:,,,/legal.txt"); // Path to the legal disclaimer resource
+            Uri legalUri = new("pack://application:,,,/legal.txt"); // Path to the legal disclaimer resource
             StreamResourceInfo legal = Application.GetResourceStream(legalUri); // Get the resource stream
             if (legal != null) // Check if the resource was found, and read it
             {
-                using (StreamReader reader = new StreamReader(legal.Stream))
-                {
-                    string content = reader.ReadToEnd();
-                    MessageBox.Show(content, "Legal disclaimer", MessageBoxButton.OK, MessageBoxImage.None); // Show the legal disclaimer in a message box
-                }
+                using StreamReader reader = new(legal.Stream);
+                string content = reader.ReadToEnd();
+                MessageBox.Show(content, "Legal disclaimer", MessageBoxButton.OK, MessageBoxImage.None); // Show the legal disclaimer in a message box
             }
         }
-        private void CloseWindow (object sender, RoutedEventArgs e)
+        private void HideWindow_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }

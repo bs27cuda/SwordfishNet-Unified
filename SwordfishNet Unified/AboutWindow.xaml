@@ -12,7 +12,7 @@
     <Grid>
         <TextBlock x:Name="Aboutblock" TextWrapping="Wrap" VerticalAlignment="Top" HorizontalAlignment="Stretch" Padding="10"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button x:Name="Close" Content="Close" Width="150" Height="36" VerticalAlignment="Bottom" Margin="20" Click="CloseWindow"/>
+            <Button x:Name="CloseBtn" Content="Okay" Width="150" Height="36" VerticalAlignment="Bottom" Margin="20" Click="HideWindow_Click"/>
             <Button x:Name="Legal" Content="Legal disclaimer" Width="150" Height="36" VerticalAlignment="Bottom" Margin="20" Click="ShowLegal"/>
         </StackPanel>
     </Grid>
